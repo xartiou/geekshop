@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 07:48+0000\n"
+"POT-Creation-Date: 2021-12-24 15:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,30 +20,38 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: admins/templates/admins/includes/siberia_bar.html:11
+#: .\admins\templates\admins\admin.html:7
+msgid "Administrative Panel"
+msgstr "Административная панель"
+
+#: .\admins\templates\admins\includes\siberia_bar.html:6
+msgid "Applications"
+msgstr "Приложения"
+
+#: .\admins\templates\admins\includes\siberia_bar.html:11
 msgid "Users"
 msgstr "Пользователи"
 
-#: admins/templates/admins/includes/siberia_bar.html:17
+#: .\admins\templates\admins\includes\siberia_bar.html:17
 msgid "Categories"
 msgstr "Категории"
 
-#: admins/templates/admins/includes/siberia_bar.html:23
+#: .\admins\templates\admins\includes\siberia_bar.html:23
 msgid "Products"
 msgstr "Продукты"
 
-#: authapp/validator.py:9
+#: .\authapp\validator.py:8
 msgid "Имя не может быть только цифрами"
 msgstr ""
 
-#: authapp/validator.py:14
+#: .\authapp\validator.py:13
 msgid "Имя не может содержать цифры"
 msgstr ""
 
-#: geekshop/settings.py:116
+#: .\geekshop\settings.py:116
 msgid "English"
 msgstr "Английский"
 
-#: geekshop/settings.py:117
+#: .\geekshop\settings.py:117
 msgid "Russia"
 msgstr "Русский"
