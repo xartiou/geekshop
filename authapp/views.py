@@ -47,8 +47,8 @@ class RegisterListView(FormView, BaseClassContextMixin):
         message = f'To confirm your account {user.username} on the portal \n {settings.DOMAIN_NAME}{verify_link}'
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
-    @staticmethod
-    def verify(email, activate_key):
+    #@staticmethod
+    def verify(self, email, activate_key):
         pass
 
 
