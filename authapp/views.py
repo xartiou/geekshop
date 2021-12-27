@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages, auth
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
@@ -6,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
-from django.conf import settings
+
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm
 from authapp.models import User
 from baskets.models import Basket
@@ -47,7 +48,7 @@ class RegisterListView(FormView, BaseClassContextMixin):
         message = f'To confirm your account {user.username} on the portal \n {settings.DOMAIN_NAME}{verify_link}'
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
-    #@staticmethod
+    # @staticmethod
     def verify(self, email, activate_key):
         try:
             user = User.objects.get(email=email)
@@ -57,15 +58,10 @@ class RegisterListView(FormView, BaseClassContextMixin):
                 user.is_active = True
                 user.save()
                 auth.login(self, user)
-                return render(self, 'authapp/verification.html')
-            else:
-                print(f'error activation user: {user}')
-                return render(self, 'authapp/verification.html')
+            return render(self, 'authapp/verification.html')
         except Exception as e:
             print(f'error activation user : {e.args}')
             return HttpResponseRedirect(reverse('index'))
-
-
 
 
 class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
