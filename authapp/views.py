@@ -48,7 +48,6 @@ class RegisterListView(FormView, BaseClassContextMixin):
         message = f'To confirm your account {user.username} on the portal \n {settings.DOMAIN_NAME}{verify_link}'
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
-    # @staticmethod
     def verify(self, email, activate_key):
         try:
             user = User.objects.get(email=email)
@@ -79,10 +78,10 @@ class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     def get_object(self, *args, **kwargs):
         return get_object_or_404(User, pk=self.request.user.pk)
 
-    def get_context_data(self, **kwargs):
-        context = super(ProfileFormView, self).get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.request.user)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(ProfileFormView, self).get_context_data(**kwargs)
+    #     context['baskets'] = Basket.objects.filter(user=self.request.user)
+    #     return context
 
 
 class Logout(LogoutView):
