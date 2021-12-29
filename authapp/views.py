@@ -57,7 +57,7 @@ class RegisterListView(FormView, BaseClassContextMixin):
                 user.is_active = True
                 user.save()
                 auth.login(self, user)
-            return render(self, 'authapp/verification.html')
+                return render(self, 'authapp/verification.html')
         except Exception as e:
             print(f'error activation user : {e.args}')
             return HttpResponseRedirect(reverse('index'))
