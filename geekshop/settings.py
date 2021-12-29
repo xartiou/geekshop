@@ -177,12 +177,13 @@ SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True  # запрос на разр�
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.create_user',
-    'authapp.pipeline.save_user_profile',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.social_auth.social_details',  # открытые данные
+    'social_core.pipeline.social_auth.social_uid',  # получаем уникальный id
+    'social_core.pipeline.social_auth.auth_allowed',  # доступность авторизации
+    'social_core.pipeline.social_auth.social_user',  # пользователь социальной сети
+    'social_core.pipeline.user.create_user',  # создание пользователя
+    'authapp.pipeline.save_user_profile',  # данные профиля пользователя (наш PIPELINE)
+    'social_core.pipeline.social_auth.associate_user',  # связь пользователя из базы и соцсети
+    'social_core.pipeline.social_auth.load_extra_data',  # расширенные данные
+    'social_core.pipeline.user.user_details',  # сохранение в user_details
 )
