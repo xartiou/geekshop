@@ -29,12 +29,12 @@ class UserProfile(models.Model):
     MALE = 'M'
     FEMALE = 'W'
     GENDER_CHOICES = (
-        (MALE, 'М'),
-        (FEMALE, 'Ж'),
+        (MALE, 'МУЖ'),
+        (FEMALE, 'ЖЕН'),
     )
     user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
     about = models.TextField(verbose_name='о себе', blank=True, null=True)
-    gender = models.CharField(verbose_name='пол', choices=GENDER_CHOICES, blank=True,max_length=2)
+    gender = models.CharField(verbose_name='пол', choices=GENDER_CHOICES, blank=True,max_length=3)
 
 # сигналы на создание и сохранение данных пользователя
     @receiver(post_save, sender=User)
