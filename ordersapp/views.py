@@ -19,14 +19,14 @@ class OrderListView(ListView, BaseClassContextMixin):  # добавили Mixin 
     model = Order
     title = 'Geekshop | Список заказов'
 
-    def get_queryset(self):
-        return Order.objects.filter(is_active=True)  # при удалении будут сохранятся только активные
+    def get_queryset(self):  # при удалении будут сохранятся только активные
+        return Order.objects.filter(is_active=True, user=self.request.user)
 
 
 class OrderCreateView(CreateView, BaseClassContextMixin):
     model = Order
     fields = []
-    success_url = reverse_lazy('order:list')
+    success_url = reverse_lazy('orders:list')
     title = 'Geekshop | Создание заказа'
 
     def get_context_data(self, **kwargs):
@@ -74,7 +74,39 @@ class OrderDetailView(DetailView, BaseClassContextMixin):
 
 
 class OrderUpdateView(UpdateView, BaseClassContextMixin):
-    pass
+    model = Order
+    fields = []
+    success_url = reverse_lazy('orders:list')
+    title = 'Geekshop | Редактирование заказа'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderUpdateView, self).get_context_data(**kwargs)
+
+        OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemsForm, extra=1)
+        if self.request.POST:
+            formset = OrderFormSet(self.request.POST, instance=self.object)
+        else:
+            formset = OrderFormSet(instance=self.object)
+            for form in formset:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+        context['orderitems'] = formset
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        orderitems = context['orderitems']
+
+        with transaction.atomic():
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
+            if self.object.get_total_cost() == 0:
+                self.object.delete()
+
+        return super(OrderUpdateView, self).form_valid(form)
 
 
 class OrderDeleteView(DeleteView, BaseClassContextMixin):
@@ -88,4 +120,4 @@ def order_forming_complete(request, pk):
     order = get_object_or_404(Order, pk=pk)
     order.status = order.SEND_TO_PROCESED
     order.save()
-    return HttpResponseRedirect(reverse('order:list'))
+    return HttpResponseRedirect(reverse('orders:list'))
