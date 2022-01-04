@@ -19,6 +19,9 @@ class OrderListView(ListView, BaseClassContextMixin):  # добавили Mixin 
     model = Order
     title = 'Geekshop | Список заказов'
 
+    def get_queryset(self):
+        return Order.objects.filter(is_active=True)  # при удалении будут сохранятся только активные
+
 
 class OrderCreateView(CreateView, BaseClassContextMixin):
     model = Order
@@ -86,4 +89,3 @@ def order_forming_complete(request, pk):
     order.status = order.SEND_TO_PROCESED
     order.save()
     return HttpResponseRedirect(reverse('order:list'))
-
