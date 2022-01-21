@@ -10,6 +10,8 @@ from mainapp.mixin import BaseClassContextMixin
 from ordersapp.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
 
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, pre_delete
 
 # Create your views here.
 
@@ -121,3 +123,24 @@ def order_forming_complete(request, pk):
     order.status = order.SEND_TO_PROCESED
     order.save()
     return HttpResponseRedirect(reverse('orders:list'))
+
+
+    # сигнал функция обновления количества товаров или корзины при удалении
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete,sender=Basket)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()
+
+    # сигнал функция обновления количества товаров или корзины при сохранении
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save,sender=Basket)
+def product_quantity_update_save(sender, instance, **kwargs):
+    if instance.pk:
+        get_item = instance.get_item(int(instance.pk))
+        instance.product.quantity -= instance.quantity - get_item
+    else:
+        instance.product.quantity -= instance.quantity
+    instance.product.save()
+
+

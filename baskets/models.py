@@ -45,21 +45,21 @@ class Basket(models.Model):
         return sum(basket.quantity for basket in baskets)
 
     # метод удаления при занесении товара в корзину
-    def delete(self, *args, **kwargs):
-        self.product.quantity += self.quantity
-        self.product.save()
-        super(Basket, self).delete(*args, **kwargs)
-
-    # метод сохранения при удалении со склада
-    def save(self, *args, **kwargs):
-        if self.pk:
-            get_item = self.get_item(int(self.pk))
-            self.product.quantity -= self.quantity - get_item
-        else:
-            self.product.quantity -= self.quantity
-
-        self.product.save()
-        super(Basket, self).save(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     self.product.quantity += self.quantity
+    #     self.product.save()
+    #     super(Basket, self).delete(*args, **kwargs)
+    #
+    # # метод сохранения при удалении со склада
+    # def save(self, *args, **kwargs):
+    #     if self.pk:
+    #         get_item = self.get_item(int(self.pk))
+    #         self.product.quantity -= self.quantity - get_item
+    #     else:
+    #         self.product.quantity -= self.quantity
+    #
+    #     self.product.save()
+    #     super(Basket, self).save(*args, **kwargs)
 
     @staticmethod
     def get_item(pk):
