@@ -100,7 +100,7 @@ class OrderUpdateView(UpdateView, BaseClassContextMixin):
         orderitems = context['orderitems']
 
         with transaction.atomic():
-            self.object = form.save()
+            # self.object = form.save()
             if orderitems.is_valid():
                 orderitems.instance = self.object
                 orderitems.save()

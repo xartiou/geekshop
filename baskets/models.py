@@ -6,18 +6,18 @@ from authapp.models import User
 from mainapp.models import Product
 
 # менеджер для метода удаления при работе с QuerySet
-class BasketQuerySet(models.QuerySet):
-    def delete(self, *args, **kwargs):
-        for item in self:
-            item.product.quantity += item.quantity
-            item.product.save()
-        super(BasketQuerySet, self).delete(*args, **kwargs)
+# class BasketQuerySet(models.QuerySet):
+#     def delete(self, *args, **kwargs):
+#         for item in self:
+#             item.product.quantity += item.quantity
+#             item.product.save()
+#         super(BasketQuerySet, self).delete(*args, **kwargs)
 
 
 
 class Basket(models.Model):
     # прописываем менеджер QuerySet в класс
-    objects = BasketQuerySet.as_manager()
+    # objects = BasketQuerySet.as_manager()
 
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
