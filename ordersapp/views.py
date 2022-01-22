@@ -47,7 +47,7 @@ class OrderCreateView(CreateView, BaseClassContextMixin):
                     form.initial['product'] = basket_item[num].product
                     form.initial['quantity'] = basket_item[num].quantity
                     form.initial['price'] = basket_item[num].product.price
-                basket_item.delete()
+                # basket_item.delete()
             else:
                 formset = OrderFormSet()
         context['orderitems'] = formset
@@ -58,7 +58,7 @@ class OrderCreateView(CreateView, BaseClassContextMixin):
         orderitems = context['orderitems']
 
         with transaction.atomic():
-            # Basket.get_item(self.request.user).delete()
+            Basket.objects.filter(user=self.request.user).delete()
             form.instance.user = self.request.user
             self.object = form.save()
             if orderitems.is_valid():
@@ -126,22 +126,20 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('orders:list'))
 
 
-    # сигнал функция обновления количества товаров или корзины при удалении
+    # сигнал функция обновления количества товаров или корзины при Сохранении в заказ
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save,sender=Basket)
+def product_quantity_update_save(sender, instance, **kwargs):
+    if instance.pk:  # если создан
+        get_item = instance.get_item(int(instance.pk))
+        instance.product.quantity -= instance.quantity - get_item
+    else: # если не создан(новый)
+        instance.product.quantity -= instance.quantity
+    instance.product.save()
+
+    # сигнал функция обновления количества товаров или корзины при Удалении заказа
 @receiver(pre_delete, sender=OrderItem)
 @receiver(pre_delete,sender=Basket)
 def product_quantity_update_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
     instance.product.save()
-
-    # сигнал функция обновления количества товаров или корзины при сохранении
-@receiver(pre_save, sender=OrderItem)
-@receiver(pre_save,sender=Basket)
-def product_quantity_update_save(sender, instance, **kwargs):
-    if instance.pk:
-        get_item = instance.get_item(int(instance.pk))
-        instance.product.quantity -= instance.quantity - get_item
-    else:
-        instance.product.quantity -= instance.quantity
-    instance.product.save()
-
-
