@@ -18,11 +18,11 @@ window.onload = function () {
     // console.log(order_total_cost)
 
 // считываем количество каждого продукта и его цену в quantity_arr и price_arr в цикле
-    for (let i = 0; i < total_forms; i++) {
+    for (let i = 0; i < TOTAL_FORMS; i++) {
         _quantity = parseInt($('input[name=orderitems-' + i + '-quantity]').val());
         _price = parseFloat($('.orderitems-' + i + '-price').text().replace(',', '.'));
 
-        quantity_arr[i] = quantity;
+        quantity_arr[i] = _quantity;
         if (_price) {
             price_arr[i] = _price;
         } else {
