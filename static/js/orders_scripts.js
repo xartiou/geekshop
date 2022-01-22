@@ -1,29 +1,30 @@
 window.onload = function () {
 
-    let quantity, price, orderitem_num, delta_quantity, orderitem_quantity, delta_cost
+//    нам нужны переменные
+    let _quantity, _price, orderitems_num, delta_quantity, orderitems_quantity, delta_cost
 
-    let quantity_arr = []
-    let price_arr = []
+    let quantity_arr = [];
+    let price_arr = [];
 
 // получаем количество строк
-    let total_forms = parseInt($('input[name=orderitems-TOTAL_FORMS]').val())
-    // console.log(total_forms)
+    let TOTAL_FORMS = parseInt($('input[name=orderitems-TOTAL_FORMS]').val());
+    console.log(TOTAL_FORMS)
 
 // получаем общее количество и сумму
     let order_total_quantity = parseInt($('.order_total_quantity').text()) || 0;
-    let order_total_cost = parseInt($('.order_total_cost').text().replace(',', '.')) || 0;
+    let order_total_cost = parseFloat($('.order_total_cost').text().replace(',', '.')) || 0;
 
     // console.log(order_total_quantity)
     // console.log(order_total_cost)
 
 // считываем количество каждого продукта и его цену в quantity_arr и price_arr в цикле
     for (let i = 0; i < total_forms; i++) {
-        quantity = parseInt($('input[name=orderitems-' + i + '-quantity]').val())
-        price = parseInt($('.orderitems-' + i + '-price').text().replace(',', '.'))
+        _quantity = parseInt($('input[name=orderitems-' + i + '-quantity]').val());
+        _price = parseFloat($('.orderitems-' + i + '-price').text().replace(',', '.'));
 
         quantity_arr[i] = quantity;
-        if (price) {
-            price_arr[i] = price;
+        if (_price) {
+            price_arr[i] = _price;
         } else {
             price_arr[i] = 0;
         }
@@ -36,42 +37,63 @@ window.onload = function () {
 
 // 1 метод для получения количества, цены и суммы
     $('.order_form').on('click', 'input[type=number]', function () {
-            let target = event.target
-            orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
-            if (price_arr[orderitem_num]) {
-                orderitem_quantity = parseInt(target.value);
-                delta_quantity = orderitem_quantity - quantity_arr[orderitem_num];
-                quantity_arr[orderitem_num] = orderitem_quantity;
-                orderSummaryUpdate(price_arr[orderitem_num], delta_quantity)
+            let target = event.target;
+            orderitems_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
+            if (price_arr[orderitems_num]) {
+                orderitems_quantity = parseInt(target.value);
+                delta_quantity = orderitems_quantity - quantity_arr[orderitems_num];
+                quantity_arr[orderitems_num] = orderitems_quantity;
+                orderSummaryUpdate(price_arr[orderitems_num], delta_quantity);
             }
-        }
-    )
-
-
-//2 метод для реакции на удалить
-    $('.order_form').on('click', 'input[type=checkbox]', function () {
-            let target = event.target
-            orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-DELETE', ''));
-            if (target.checked) {
-                delta_quantity = -quantity_arr[orderitem_num]
-
-            } else {
-                delta_quantity = quantity_arr[orderitem_num];
-            }
-            orderSummaryUpdate(price_arr[orderitem_num], delta_quantity)
         }
     );
 
-// метод общий для пересчета количества, цены
-    function orderSummaryUpdate(orderitem_price, delta_quantity) {
-        delta_cost = orderitem_price * delta_quantity;
-        order_total_cost = Number((order_total_cost + delta_cost).toFixed(2))
-        order_total_quantity = order_total_quantity + delta_quantity
+    // метод общий для пересчета количества, цены
+    function orderSummaryUpdate(orderitems_price, delta_quantity) {
+        delta_cost = orderitems_price * delta_quantity;
+        order_total_cost = Number((order_total_cost + delta_cost).toFixed(2));
+        order_total_quantity = order_total_quantity + delta_quantity;
 
         $('.order_total_quantity').html(order_total_quantity.toString());
         $('.order_total_cost').html(order_total_cost.toString() + ',00');
 
-    }
+    };
+//    function orderSummaryUpdate(orderitem_price, delta_quantity){
+//        delta_cost = orderitem_price * delta_quantity;
+//
+//        order_total_cost = Number((order_total_cost + delta_cost). toFixed(2));
+//        order_total_quantity = order_total_quantity + delta_quantity;
+//
+//        $('.order_total_quantity').html(order_total_quantity);
+//        $('.order_total_cost').html(order_total_cost);
+//
+//
+//    }
+
+//2 метод для реакции на удалить
+    $('.order_form').on('click', 'input[type=checkbox]', function () {
+            let target = event.target
+            orderitems_num = parseInt(target.name.replace('orderitems-', '').replace('-DELETE', ''));
+            if (target.checked) {
+                delta_quantity = -quantity_arr[orderitems_num];
+
+            } else {
+                delta_quantity = quantity_arr[orderitems_num];
+            }
+            orderSummaryUpdate(price_arr[orderitems_num], delta_quantity);
+        }
+    );
+
+// метод общий для пересчета количества, цены
+    function orderSummaryUpdate(orderitems_price, delta_quantity) {
+        delta_cost = orderitems_price * delta_quantity;
+        order_total_cost = Number((order_total_cost + delta_cost).toFixed(2));
+        order_total_quantity = order_total_quantity + delta_quantity;
+
+        $('.order_total_quantity').html(order_total_quantity.toString());
+        $('.order_total_cost').html(order_total_cost.toString() + ',00');
+
+    };
 
 // добавляем кнопки действий
     $('.formset_row').formset({
@@ -83,11 +105,11 @@ window.onload = function () {
 
 // функция удаления
     function deleteOrderItem(row) {
-        let target_name = row[0].querySelector('input[type="number"]').name
-        orderitem_num = parseInt(target_name.replace('orderitems-', '').replace('-quantity', ''));
-        delta_quantity = -quantity_arr[orderitem_num]
-        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity)
-    }
+        let target_name = row[0].querySelector('input[type="number"]').name;
+        orderitems_num = parseInt(target_name.replace('orderitems-', '').replace('-quantity', ''));
+        delta_quantity = -quantity_arr[orderitems_num];
+        orderSummaryUpdate(price_arr[orderitems_num], delta_quantity);
+    };
 
 
-}
+};

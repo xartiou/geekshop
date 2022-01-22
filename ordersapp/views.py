@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin
-from ordersapp.forms import OrderItemsForm
+from ordersapp.forms import OrderItemForm
 from ordersapp.models import Order, OrderItem
 
 from django.dispatch import receiver
@@ -35,19 +35,19 @@ class OrderCreateView(CreateView, BaseClassContextMixin):
         context = super(OrderCreateView, self).get_context_data(**kwargs)
 
         # inlineformset_factory - фабрика форм
-        OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemsForm, extra=1)
+        OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemForm, extra=1)
         if self.request.POST:
             formset = OrderFormSet(self.request.POST)
         else:
             basket_item = Basket.objects.filter(user=self.request.user)
             if basket_item:
-                OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemsForm, extra=basket_item.count())
+                OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemForm, extra=basket_item.count())
                 formset = OrderFormSet()
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_item[num].product
                     form.initial['quantity'] = basket_item[num].quantity
                     form.initial['price'] = basket_item[num].product.price
-                basket_item.delete()
+                # basket_item.delete()
             else:
                 formset = OrderFormSet()
         context['orderitems'] = formset
@@ -58,7 +58,7 @@ class OrderCreateView(CreateView, BaseClassContextMixin):
         orderitems = context['orderitems']
 
         with transaction.atomic():
-            # Basket.get_item(self.request.user).delete()
+            Basket.objects.filter(user=self.request.user).delete()
             form.instance.user = self.request.user
             self.object = form.save()
             if orderitems.is_valid():
@@ -85,13 +85,13 @@ class OrderUpdateView(UpdateView, BaseClassContextMixin):
     def get_context_data(self, **kwargs):
         context = super(OrderUpdateView, self).get_context_data(**kwargs)
 
-        OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemsForm, extra=1)
+        OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemForm, extra=1)
         if self.request.POST:
             formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
             for form in formset:
-                if form.instance.pk:
+                if form.instance.pk:  # добавляем пустую форму
                     form.initial['price'] = form.instance.product.price
         context['orderitems'] = formset
         return context
@@ -126,16 +126,9 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('orders:list'))
 
 
-    # сигнал функция обновления количества товаров или корзины при удалении
-@receiver(pre_delete, sender=OrderItem)
-@receiver(pre_delete,sender=Basket)
-def product_quantity_update_delete(sender, instance, **kwargs):
-    instance.product.quantity += instance.quantity
-    instance.product.save()
-
-    # сигнал функция обновления количества товаров или корзины при сохранении
+    # сигнал функция обновления количества товаров или корзины при Сохранении в заказ
 @receiver(pre_save, sender=OrderItem)
-@receiver(pre_save,sender=Basket)
+@receiver(pre_save, sender=Basket)
 def product_quantity_update_save(sender, instance, **kwargs):
     if instance.pk:
         get_item = instance.get_item(int(instance.pk))
@@ -144,4 +137,9 @@ def product_quantity_update_save(sender, instance, **kwargs):
         instance.product.quantity -= instance.quantity
     instance.product.save()
 
-
+    # сигнал функция обновления количества товаров или корзины при Удалении заказа
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete,sender=Basket)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()

@@ -1,4 +1,4 @@
-{% extends "mainapp/base.html" %}
+{% extends "ordersapp/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -14,7 +14,7 @@
                         <thead>
                         <tr>
                             {% for field in form.visible_fields %}
-                                <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
+                                <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
                                     {{ field.label|capfirst }}
                                 </th>
                             {% endfor %}
@@ -32,16 +32,14 @@
                                 {{ field.errors.as_ul }}
 
                                 {% if field.name == 'price' %}
-                                    {% if not field.value %}
-                                    {% else %}
+                                    {% if field.value %}
                                         <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">
-                                            {{ field.value}} руб </span>
+                                            {{ field.value}}
+                                        </span>руб.
                                     {% endif %}
                                 {% else %}
                                     {{ field }}
                                 {% endif %}
-
-
                             </td>
                         {% endfor %}
                     </tr>
