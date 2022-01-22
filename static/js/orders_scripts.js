@@ -8,14 +8,15 @@ window.onload = function () {
 
 // получаем количество строк
     let TOTAL_FORMS = parseInt($('input[name=orderitems-TOTAL_FORMS]').val());
-    console.log(TOTAL_FORMS)
+
+    console.log(TOTAL_FORMS);
 
 // получаем общее количество и сумму
     let order_total_quantity = parseInt($('.order_total_quantity').text()) || 0;
     let order_total_cost = parseFloat($('.order_total_cost').text().replace(',', '.')) || 0;
 
-    // console.log(order_total_quantity)
-    // console.log(order_total_cost)
+    console.log(order_total_quantity);
+    console.log(order_total_cost);
 
 // считываем количество каждого продукта и его цену в quantity_arr и price_arr в цикле
     for (let i = 0; i < TOTAL_FORMS; i++) {
@@ -58,17 +59,6 @@ window.onload = function () {
         $('.order_total_cost').html(order_total_cost.toString() + ',00');
 
     };
-//    function orderSummaryUpdate(orderitem_price, delta_quantity){
-//        delta_cost = orderitem_price * delta_quantity;
-//
-//        order_total_cost = Number((order_total_cost + delta_cost). toFixed(2));
-//        order_total_quantity = order_total_quantity + delta_quantity;
-//
-//        $('.order_total_quantity').html(order_total_quantity);
-//        $('.order_total_cost').html(order_total_cost);
-//
-//
-//    }
 
 //2 метод для реакции на удалить
     $('.order_form').on('click', 'input[type=checkbox]', function () {
@@ -95,8 +85,9 @@ window.onload = function () {
 
     };
 
-// добавляем кнопки действий
+// добавляем кнопки действий подключаем jquery.formset.js
     $('.formset_row').formset({
+        //    опции
         addText: 'добавить продукт',
         deleteText: 'Удалить',
         prefix: 'orderitems',
