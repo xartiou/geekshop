@@ -65,3 +65,12 @@ class Basket(models.Model):
     def get_item(pk):
         return Basket.objects.get(pk=pk).quantity
 
+    @staticmethod
+    def get_product(user,product):
+        return Basket.objects.filter(user=user, product=product)
+
+    @classmethod
+    def get_products_quantity(cls, user):
+        basket_item = cls.get_item(user)
+        basket_item_dic = {}
+        [basket_item_dic.update({item.product: item.quantity}) for item in basket_item]
