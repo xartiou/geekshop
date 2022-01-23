@@ -20,6 +20,9 @@ window.onload = function () {
     }
     console.log(quantity_arr);
     console.log(price_arr);
+    if (!order_total_quantity) {
+        orderSummaryRecalc();
+    }
 
 //    события
     $('.order_form').on('click', 'input[type=number]', function() {
@@ -44,6 +47,40 @@ window.onload = function () {
         }
         orderSummaryUpdate(price_arr[orderitems_num], delta_quantity);
     });
+
+// событие на изменение наименования товара
+    $('.order_form').on('change', 'select', function() {
+       let target = event.target;
+       orderitems_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
+       let orderitems_product_pk = target.options[target.selectedIndex].value;
+
+       $.ajax({
+           url: '/orders/products/' + orderitems_product_pk + '/price/',
+           success: function(data){
+           console.log(data);
+           console.log(TOTAL_FORMS);
+               if (data.price) {
+                   price_arr[orderitems_num] = parseFloat(data.price);
+                   let price_html = "<span>" + data.price.toString().replace('.', ',') + "</span>";
+                   let curr_tr = $('.order_form table').find('tr:eq(' + (orderitems_num + 1) + ')');
+                   curr_tr.find('td:eq(2)').html(price_html);
+                   orderSummaryRecalc();
+               }
+           },
+       });
+    });
+// функция для пересчета цены при смене товара
+    function orderSummaryRecalc() {
+        order_total_quantity = 0;
+        order_total_cost = 0;
+        for (let i=0; i < TOTAL_FORMS; i++) {
+            order_total_quantity += quantity_arr[i];
+            order_total_cost += quantity_arr[i] * price_arr[i];
+        }
+        $('.order_total_quantity').html(order_total_quantity.toString());
+        $('.order_total_cost').html(Number(order_total_cost.toFixed(2)).toString());
+    }
+
 
 //    общая функция обновления данных
     function orderSummaryUpdate(orderitems_price, delta_quantity) {

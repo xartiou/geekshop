@@ -146,9 +146,9 @@ def product_quantity_update_delete(sender, instance, **kwargs):
 
 
 # контроллер получения цены продукта если есть pk, если нет то 0
-# def product_price(request,pk):
-#     if request.is_ajax():
-#         product_item = Product.objects.filter(pk=pk).first()
-#         if product_item:
-#             return JsonResponse({'price': product_item.price})
-#         return JsonResponse({'price': 0})
+def product_price(request,pk):
+    if request.is_ajax():
+        product_item = Product.objects.filter(pk=pk).first()
+        if product_item:
+            return JsonResponse({'price': product_item.price})
+        return JsonResponse({'price': 0})
