@@ -27,7 +27,7 @@ load_dotenv(BASE_DIR / '.env')
 # SECURITY WARNING: don't run with debug turned on in production!
 # для работы локально режим отладки True, а для развернутого на домене False
 # DEBUG = True
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']  # сможем попасть в приложение с любого домена
 
