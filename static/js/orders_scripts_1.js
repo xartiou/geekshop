@@ -61,7 +61,7 @@ window.onload = function () {
            console.log(TOTAL_FORMS);
                if (data.price) {
                    price_arr[orderitems_num] = parseFloat(data.price);
-                   let price_html = "<span>" + data.price.toString().replace('.', ',') + "</span>"руб.;
+                   let price_html = "<span>" + data.price.toString().replace('.', ',') + "</span>";
                    let curr_tr = $('.order_form table').find('tr:eq(' + (orderitems_num + 1) + ')');
                    curr_tr.find('td:eq(2)').html(price_html);
                    orderSummaryRecalc();
@@ -102,9 +102,13 @@ window.onload = function () {
 // функция удаления строки
     function deleteOrderItem(row) {
         delta_quantity = -quantity_arr[orderitems_num]
+        quantity_arr[orderitems_num] = 0;
         orderSummaryUpdate(price_arr[orderitems_num], delta_quantity);
         let target_name = row[0].querySelector('input[type=number]').name;
         orderitems_num = target_name.replace('orderitems-', '').replace('-quantity', '');
     }
 
 }
+
+
+

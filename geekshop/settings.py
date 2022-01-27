@@ -25,9 +25,11 @@ from dotenv import load_dotenv
 load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# для работы локально режим отладки True, а для развернутого на домене False
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']  # сможем попасть в приложение с любого домена
 
 # Application definition
 
@@ -88,8 +90,11 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3_old',
+        # 'ENGINE': 'django.db.backends.sqlite3',  активно если проект локально
+        'ENGINE': 'django.db.backends.postgresql', #  активно если проект на внешнем сервере
+        # 'NAME': BASE_DIR / 'db.sqlite3_old', активно если проект локально
+        'NAME': 'geekshop',  #  активно если проект на внешнем сервере
+        'USER': 'postgres', #  активно если проект на внешнем сервере
     }
 }
 
