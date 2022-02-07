@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',  активно если проект локально
+        # 'ENGINE': 'django.db.backends.sqlite3',  #активно если проект локально
         'ENGINE': 'django.db.backends.postgresql', #  активно если проект на внешнем сервере
-        # 'NAME': BASE_DIR / 'db.sqlite3_old', активно если проект локально
+        # 'NAME': BASE_DIR / 'db.sqlite3_old', #активно если проект локально
         'NAME': 'geekshop',  #  активно если проект на внешнем сервере
         'USER': 'postgres', #  активно если проект на внешнем сервере
     }
@@ -170,6 +170,9 @@ LOGIN_ERROR_URL = '/'
 
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 # python -m smtpd -n -c DebuggingServer localhost:25
+
+
+
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
