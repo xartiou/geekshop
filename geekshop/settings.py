@@ -201,16 +201,16 @@ LOGIN_ERROR_URL = '/'
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 # python -m smtp -n -c DebuggingServer localhost:25
 
-DOMAIN_NAME = 'http://5.63.155.195'
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'ivanolegovichsysoev@yandex.ru'
-EMAIL_HOST_PASSWORD = 'parol'
-EMAIL_HOST_SSL = True
-EMAIL_HOST_TLS = False
-
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# DOMAIN_NAME = 'http://5.63.155.195'
+# EMAIL_HOST = 'smtp.yandex.ru'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'ivanolegovichsysoev@yandex.ru'
+# EMAIL_HOST_PASSWORD = 'parol'
+# EMAIL_HOST_SSL = True
+# EMAIL_HOST_TLS = False
+#
+# SERVER_EMAIL = EMAIL_HOST_USER
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
