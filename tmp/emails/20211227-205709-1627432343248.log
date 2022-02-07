@@ -1,0 +1,12 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: To activate the account test111 follow the link
+From: django@db.local
+To: 973i@mail.ru
+Date: Mon, 27 Dec 2021 17:57:09 -0000
+Message-ID: <164062782906.14428.14051993333532109419@BegemotHP>
+
+To confirm your account test111 on the portal 
+ http://localhost:8000/users/verify/973i@mail.ru/00f903772ecf4089061e3620bb7f5e4ccdcebca5/
+-------------------------------------------------------------------------------
