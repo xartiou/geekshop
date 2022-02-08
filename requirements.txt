@@ -60,6 +60,7 @@ requests-oauthlib==1.3.0
 ruamel.yaml==0.17.17
 ruamel.yaml.clib==0.2.6
 Rx==1.6.1
+siege==0.0.2
 singledispatch==3.7.0
 six==1.16.0
 social-auth-app-django==5.0.0
