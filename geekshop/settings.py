@@ -49,6 +49,10 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'template_profiler_panel',
     'django_extensions',
+<<<<<<< HEAD
+=======
+    'pydotplus',
+>>>>>>> 2e9cc2ef8ffefa3a75b19998a316c3cd39b19e7f
 ]
 
 MIDDLEWARE = [
