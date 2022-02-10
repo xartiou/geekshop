@@ -29,6 +29,18 @@ def get_link_category():
     else:
         return ProductCategory.objects.all()
 
+# функция кеширования всех продуктов
+def get_products():
+    if settings.LOW_CACHE:
+        key = 'link_products'
+        link_products = cache.get(key)
+        if link_products is None:
+            link_products = Product.objects.all().select_related('category')
+            cache.set(key, link_products)
+        return link_products
+    else:
+        return Product.objects.all().select_related('category')
+
 def products(request, id_category=None, page=1):
     context = {
         'title': 'Geekshop | Каталог',
@@ -39,7 +51,7 @@ def products(request, id_category=None, page=1):
     else:
         products = Product.objects.all().select_related()
         # products = Product.objects.all().prefetch_related() для связи many-to-many
-
+    products = get_products()
     paginator = Paginator(products, per_page=3)
 
     try:
