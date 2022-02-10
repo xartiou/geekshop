@@ -1,5 +1,5 @@
 import os
-
+from django.views.decorators.cache import cache_page, never_cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.views.generic import DetailView
@@ -54,6 +54,7 @@ def get_product_one(pk):
         return Product.objects.get(id=pk)
 
 
+@cache_page(3600)  # кешируем данные страницы
 def products(request, id_category=None, page=1):
     context = {
         'title': 'Geekshop | Каталог',
@@ -64,7 +65,7 @@ def products(request, id_category=None, page=1):
     else:
         products = Product.objects.all().select_related()
         # products = Product.objects.all().prefetch_related() для связи many-to-many
-    products = get_products()
+    #products = get_products()  # для кеширования
     paginator = Paginator(products, per_page=3)
 
     try:
@@ -75,8 +76,8 @@ def products(request, id_category=None, page=1):
         products_paginator = paginator.page(paginator.num_pages)
 
     context['products'] = products_paginator
-    # context['categories'] = ProductCategory.objects.all()  # вызов не кешированный
-    context['categories'] = get_link_category()  # вызов кешированный
+    context['categories'] = ProductCategory.objects.all()  # вызов не кешированный
+    # context['categories'] = get_link_category()  # вызов кешированный
     return render(request, 'mainapp/products.html', context)
 
 
