@@ -55,7 +55,7 @@ def get_product_one(pk):
 
 
 # @cache_page(3600)  # кешируем данные страницы
-# @never_cache  # выводит из кеша
+@never_cache  # выводит из кеша
 def products(request, id_category=None, page=1):
     context = {
         'title': 'Geekshop | Каталог',
