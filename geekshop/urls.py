@@ -19,12 +19,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.i18n import set_language
-
+import debug_toolbar
 from mainapp.views import index, products
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
+    path('', cache_page(3600)(index), name='index'),
     path('products/', include('mainapp.urls', namespace='mainapp')),
     path('users/', include('authapp.urls', namespace='authapp')),
     path('baskets/', include('baskets.urls', namespace='baskets')),
@@ -41,3 +42,6 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [path('debug', include(debug_toolbar.urls))]
+
+
