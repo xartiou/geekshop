@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3!qm%#5%$5g0-(%vu4%j@^x9(nvvh5h*wm^kngwb7dyq&qx4*c'
 
-from dotenv import load_dotenv
+
 load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 # для работы локально режим отладки True, а для развернутого на домене False
-# DEBUG = True
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']  # сможем попасть в приложение с любого домена
@@ -96,10 +99,10 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',  #активно если проект локально
-        'ENGINE': 'django.db.backends.postgresql', #  активно если проект на внешнем сервере
-        # 'NAME': BASE_DIR / 'db.sqlite3_old', #активно если проект локально
-        'NAME': 'geekshop',  #  активно если проект на внешнем сервере
-        'USER': 'postgres', #  активно если проект на внешнем сервере
+        'ENGINE': 'django.db.backends.postgresql',  # активно если проект на внешнем сервере
+        # 'NAME': BASE_DIR / 'db.sqlite3_old',  # активно если проект локально
+        'NAME': 'geekshop',  # активно если проект на внешнем сервере
+        'USER': 'postgres',  # активно если проект на внешнем сервере
     }
 }
 
@@ -247,4 +250,3 @@ if os.name == 'posix':
         }
     }
     LOW_CACHE = True
-
