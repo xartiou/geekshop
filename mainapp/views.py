@@ -18,16 +18,16 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 # функция для кеширования categories
-def get_link_category():
+def get_link_category(pk):
     if settings.LOW_CACHE:
-        key = 'link_category'
+        key = f'link_category{pk}'
         link_category = cache.get(key)
         if link_category is None:
-            link_category = ProductCategory.objects.all()
+            link_category = ProductCategory.objects.get(id=pk)
             cache.set(key, link_category)
         return link_category
     else:
-        return ProductCategory.objects.all()
+        return ProductCategory.objects.get(id=pk)
 
 # функция кеширования всех продуктов
 def get_products():
