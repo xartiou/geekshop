@@ -1,10 +1,9 @@
 from django.db import models
 from django.utils.functional import cached_property
-
-
-# Create your models here.
 from authapp.models import User
 from mainapp.models import Product
+# Create your models here.
+
 
 # менеджер для метода удаления при работе с QuerySet
 # class BasketQuerySet(models.QuerySet):
