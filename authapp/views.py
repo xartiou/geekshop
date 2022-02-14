@@ -7,19 +7,20 @@ from django.shortcuts import render, get_object_or_404, redirect
 # Create your views here.
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm, UserProfileEditForm
 from authapp.models import User
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 
 
+# контроллер аутентификации рользователя
 class LoginListView(LoginView, BaseClassContextMixin):
     template_name = 'authapp/login.html'
     form_class = UserLoginForm
     title = 'GeekShop - Авторизация'
 
-
+# регистрация нового пользователя
 class RegisterListView(FormView, BaseClassContextMixin):
     model = User
     template_name = 'authapp/register.html'
@@ -27,8 +28,12 @@ class RegisterListView(FormView, BaseClassContextMixin):
     title = 'GeekShop - Регистрация'
     success_url = reverse_lazy('auth:login')
 
-    def post(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('mainapp:index'))
+        return super().dispatch(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             user = form.save()
