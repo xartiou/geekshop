@@ -6,8 +6,8 @@ from django.views.decorators.cache import cache_page
 app_name = 'mainapp'
 urlpatterns = [
 
-    path('', cache_page(3600)(products),name='products'),
-    path('category/<int:id_category>', cache_page(3600)(products), name='category'),
-    path('page/<int:page>', cache_page(3600)(products), name='page'),
+    path('', products, name='products'),
+    path('category/<int:id_category>', products, name='category'),
+    path('page/<int:page>', products, name='page'),
     path('detail/<int:pk>/', ProductDetail.as_view(), name='detail'),
 ]

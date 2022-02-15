@@ -63,7 +63,7 @@ class Basket(models.Model):
     #     super(Basket, self).save(*args, **kwargs)
 
     @staticmethod
-    def get_items(pk):
+    def get_item(pk):
         return Basket.objects.get(pk=pk).quantity
 
     @staticmethod
