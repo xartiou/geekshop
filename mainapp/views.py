@@ -42,16 +42,16 @@ def index(request):
 #         return Product.objects.all().select_related('category')
 
 # функция кеширования одного продукта
-# def get_product_one(pk):
-#     if settings.LOW_CACHE:
-#         key = f'product{pk}'
-#         product = cache.get(key)
-#         if product is None:
-#             product = Product.objects.get(id=pk)
-#             cache.set(key, product)
-#         return product
-#     else:
-#         return Product.objects.get(id=pk)
+def get_product_one(pk):
+    if settings.LOW_CACHE:
+        key = f'product{pk}'
+        product = cache.get(key)
+        if product is None:
+            product = Product.objects.get(id=pk)
+            cache.set(key, product)
+        return product
+    else:
+        return Product.objects.get(id=pk)
 
 
 # @cache_page(3600)  # кешируем данные страницы
